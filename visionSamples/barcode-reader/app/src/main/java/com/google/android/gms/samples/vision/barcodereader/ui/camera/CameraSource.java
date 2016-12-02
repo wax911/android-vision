@@ -785,11 +785,13 @@ public class CameraSource {
         mFocusMode = parameters.getFocusMode();
 
         if (mFlashMode != null) {
-            if (parameters.getSupportedFlashModes().contains(
-                    mFlashMode)) {
-                parameters.setFlashMode(mFlashMode);
-            } else {
-                Log.i(TAG, "Camera flash mode: " + mFlashMode + " is not supported on this device.");
+            if (parameters.getSupportedFlashModes() != null) {
+                if (parameters.getSupportedFlashModes().contains(
+                        mFlashMode)) {
+                    parameters.setFlashMode(mFlashMode);
+                } else {
+                    Log.i(TAG, "Camera flash mode: " + mFlashMode + " is not supported on this device.");
+                }
             }
         }
 
@@ -1006,7 +1008,7 @@ public class CameraSource {
         int displayAngle;
         if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
             angle = (cameraInfo.orientation + degrees) % 360;
-            displayAngle = (360 - angle); // compensate for it being mirrored
+            displayAngle = (360 - angle) % 360; // compensate for it being mirrored
         } else {  // back-facing
             angle = (cameraInfo.orientation - degrees + 360) % 360;
             displayAngle = angle;
